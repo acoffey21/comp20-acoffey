@@ -1,0 +1,20 @@
+/*.software {
+	width:1204px; 
+	height:1211px; 
+	background: url(software.png); */
+
+@media only screen and (min-width: 1200px){
+.software {
+	width:450px; 
+	height:580px; 
+	background: url(software.png) 0 0px;
+}
+}
+
+/*@media only screen and (min-width:1000px) and (max-width: 1200px){
+.software {
+	width:900px; 
+	height:580px; 
+	background: url(software.png) 0 0px;
+}
+} */
