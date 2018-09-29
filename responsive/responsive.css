@@ -38,3 +38,12 @@
 	background: url(software.png) 0px -600px;
 }
 }
+
+/*blockchain*/
+@media only screen and (max-width: 600px){
+.software {
+	width:490px; 
+	height:610px; 
+	background: url(software.png) -720px -600px;
+}
+}
