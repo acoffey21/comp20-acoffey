@@ -15,6 +15,20 @@
 
 <script>
 	// Complete this section and create a CSS file named style.css
+	var wedo = document.getElementById("wedo");
+	var lyrics = document.getElementById("lyrics");
+		wedo.addEventListener("timeupdate", function() {
+		console.log("Testing");
+		if (wedo.currentTime < 4){
+			lyrics.innerHTML = "<h2> *Instrumental* </h2>";
+		}
+		else if (wedo.currentTime > 4 && wedo.currentTime < 6){
+			lyrics.innerHTML = "<h2> Who controls the British Crown? </h2>";
+		}
+		else if (wedo.currentTime > 6 && wedo.currentTime < 8){
+			lyrics.innerHTML = "<h2> Who keeps the metric system down? </h2>";
+		}
+	}, false); 
 </script>
 </body>
 </html>
