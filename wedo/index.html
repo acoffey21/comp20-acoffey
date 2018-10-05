@@ -18,7 +18,6 @@
 	var wedo = document.getElementById("wedo");
 	var lyrics = document.getElementById("lyrics");
 		wedo.addEventListener("timeupdate", function() {
-		console.log("Testing");
 		if (wedo.currentTime < 4){
 			lyrics.innerHTML = "<h2> *Instrumental* </h2>";
 		}
@@ -28,7 +27,37 @@
 		else if (wedo.currentTime > 6 && wedo.currentTime < 8){
 			lyrics.innerHTML = "<h2> Who keeps the metric system down? </h2>";
 		}
-	}, false); 
+		else if (wedo.currentTime > 8 && wedo.currentTime < 12.5){
+			lyrics.innerHTML = "<h2> We do! x2 </h2>";
+		}
+		else if (wedo.currentTime > 12.5 && wedo.currentTime < 14.5){
+			lyrics.innerHTML = "<h2> Who keeps Atlantis off the maps? </h2>";
+		}
+		else if (wedo.currentTime > 14.5 && wedo.currentTime < 16.5){
+			lyrics.innerHTML = "<h2> Who keeps the Martians under wraps? </h2>";
+		}
+		else if (wedo.currentTime > 16.5 && wedo.currentTime < 21){
+			lyrics.innerHTML = "<h2> We do! x2 </h2>";	
+		}
+		else if (wedo.currentTime > 21 && wedo.currentTime < 25){
+			lyrics.innerHTML = "<h2> Who holds back the electric car?</h2>";	
+		}
+		else if (wedo.currentTime > 25 && wedo.currentTime < 29){
+			lyrics.innerHTML = "<h2> Who makes Steve Guttenberg a star? </h2>";	
+		}
+		else if (wedo.currentTime > 29 && wedo.currentTime < 33){
+			lyrics.innerHTML = "<h2> We do! x2 </h2>";	
+		}
+		else if (wedo.currentTime > 33 && wedo.currentTime < 36){
+			lyrics.innerHTML = "<h2> Who robs cavefish of their sight? </h2>";	
+		}
+		else if (wedo.currentTime > 36 && wedo.currentTime < 38){
+			lyrics.innerHTML = "<h2> Who rigs every Oscar night? </h2>";	
+		}
+		else if (wedo.currentTime > 38 && wedo.currentTime < 46){
+			lyrics.innerHTML = "<h2> We do! x2 </h2>";	
+		}
+		}, false); 
 </script>
 </body>
 </html>
