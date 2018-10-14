@@ -3,16 +3,51 @@
 
 <head>
 	<title>mbta Red Line Map</title>
-	<meta name="viewport" content="initial-scale=1.0", user-scalable=no" />
-	<meta charset="utf-8">
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDi8OEnz9KhctL4HUBPhiqzb_4LFKpW3O0"></script>
-	<!-- link style sheet here !-->
-	<script scr = "mapscript.js"></script>
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<!--link to javascript file once working !-->
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDys7G0IQ10zsN5gcWQIURo31wm4D_jYNQ"></script>
+	<link rel="stylesheet" href="style.css" />
+
+	<script>
+		function init() {
+			// south station
+			var southstation = new google.maps.LatLng(42.352271, -71.05524200000001);
+
+			// set up map
+			var theOptions = { 
+				zoom : 13,
+				center: southstation,
+				mapTypeId: google.maps.MapTypeId.ROADMAP
+			};
+
+			// create map
+	        var map = new google.maps.Map(document.getElementById("map_outline"), theOptions);
+
+	        //create marker
+	        var marker = new google.maps.Marker({
+	        	position: southstation,
+	        	title: "South Station"
+	        	//add image
+	        	//add schedule info
+	        });
+	        marker.setMap(map);
+
+	        //global info window ***
+	        var infowindow = new google.maps.InfoWindow();
+
+	        // open info window on click
+	        google.maps.event.addListener(marker, 'click', function() {
+	        	infowindow.setContent(marker.title);
+	        	infowindow.open(map,marker);
+	        });
+	}
+</script>
+	
 	
 </head>
 
-<body>
-	<div id="map"></div>
+<body onload="init()">
+	<div id="map_outline"></div>
 	
 </body>
 
