@@ -23,6 +23,7 @@ function init() {
 	var cntrlsq = new google.maps.LatLng(42.365486, -71.103802);
 	var braintree = new google.maps.LatLng(42.2078543, -71.0011385);
 
+	//var stops = [[southstation], [andrew], [portersq], ]
 	// set up map
 	var theOptions = { 
 			zoom : 13,
@@ -33,56 +34,69 @@ function init() {
 	// create map
 	var map = new google.maps.Map(document.getElementById("map_outline"), theOptions);
 
-	//create marker
-	var marker = new google.maps.Marker({
-	        position: southstation,
-	        title: "South Station"
+	//create a list of locations
+	var stations = [ 
+			{ //only displays first station
+	        "position": southstation,
+	     	"title": "South Station"
 	        //add image
 	        //add schedule info
-	    },
-	    	{position: andrew,
-	    		title: "Andrew"},
-	    	{position: portersq,
-	    		title: "Porter Square"},
-	    	{position: harvardsq,
-	    	title: "Harvard Square"},
-	    	{position: jfkumass,
-	    		title: "JFK/UMass"},
-	    	{position: savinhill,
-	    		title: "Savin Hill"},
-	    	{position: parkst,
-	    		title: "Park Street"},
-	    	{position: broadway,
-	    		title: "Broadway"},
-	    	{position: northquincy,
-	    		title: "North Quincy"},
-	    	{position: shawmut,
-	    		title: "Shawmut"},
-	    	{position: davis,
-	    		title: "Davis"},
-	    	{position: alewife,
-	    		title: "Alewife"},
-	    	{position: kendallmit,
-	    		title: "Kendall/MIT"},
-	    	{position: charlesmgh,
-	    		title: "Charles/MGH"},
-	    	{position: downtownxing,
-	    		title: "Downtown Crossing"},
-	    	{position: quincyctr,
-	    		title: "Quincy Center"},
-	    	{position: quincyadams,
-	    		title: "Quincy Adams"},
-	    	{position: ashmont,
-	    		title: "Ashmont"},
-	    	{position: wollaston,
-	    		title: "Wollaston"},
-	    	{position: fieldscnr,
-	    		title: "Fields Corner"},
-	    	{position: cntrlsq,
-	    		title: "Central Square"},
-	    	{position: braintree,
-	    		title: "Braintree"}
-	    	);
+	    	},
+	    	{"position": andrew,
+	    		"title": "Andrew"},
+	    	{"position": portersq,
+	    		"title": "Porter Square"},
+	    	{"position": harvardsq,
+	    	"title": "Harvard Square"},
+	    	{"position": jfkumass,
+	    		"title": "JFK/UMass"},
+	    	{"position": savinhill,
+	    		"title": "Savin Hill"},
+	    	{"position": parkst,
+	    		"title": "Park Street"},
+	    	{"position": broadway,
+	    		"title": "Broadway"},
+	    	{"position": northquincy,
+	    		"title": "North Quincy"},
+	    	{"position": shawmut,
+	    		"title": "Shawmut"},
+	    	{"position": davis,
+	    		"title": "Davis"},
+	    	{"position": alewife,
+	    		"title": "Alewife"},
+	    	{"position": kendallmit,
+	    		"title": "Kendall/MIT"},
+	    	{"position": charlesmgh,
+	    		"title": "Charles/MGH"},
+	    	{"position": downtownxing,
+	    		"title": "Downtown Crossing"},
+	    	{"position": quincyctr,
+	    		"title": "Quincy Center"},
+	    	{"position": quincyadams,
+	    		"title": "Quincy Adams"},
+	    	{"position": ashmont,
+	    		"title": "Ashmont"},
+	    	{"position": wollaston,
+	    		"title": "Wollaston"},
+	    	{"position": fieldscnr,
+	    		"title": "Fields Corner"},
+	    	{"position": cntrlsq,
+	    		"title": "Central Square"},
+	    	{"position": braintree,
+	    		"title": "Braintree"}
+	    ]
+	for (var i = 0, length = stations.length; i < length; i++){
+		var data = stations[i]
+
+	//create marker
+	var marker = new google.maps.Marker({
+		position: data.position,
+		map: map,
+		title: data.title
+
+	    	});
+	}
+
 	marker.setMap(map);
 
 	//global info window ***
