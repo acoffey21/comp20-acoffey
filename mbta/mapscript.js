@@ -11,7 +11,7 @@ function init() {
 	var northquincy = new google.maps.LatLng(42.275275, -71.029583);
 	var shawmut = new google.maps.LatLng(42.29312583, -71.06573769000001);
 	var davis = new google.maps.LatLng(42.39674, -71.121815);
-	var alewife = new google.maps.LatLng(42.395428, -71.121815);
+	var alewife = new google.maps.LatLng(42.395428, -71.142483);
 	var kendallmit = new google.maps.LatLng(42.36249079, -71.08617653);
 	var charlesmgh = new google.maps.LatLng(42.361166, -71.070628);
 	var downtownxing = new google.maps.LatLng(42.355518, -71.060225);
@@ -23,7 +23,7 @@ function init() {
 	var cntrlsq = new google.maps.LatLng(42.365486, -71.103802);
 	var braintree = new google.maps.LatLng(42.2078543, -71.0011385);
 
-	//var stops = [[southstation], [andrew], [portersq], ]
+
 	// set up map
 	var theOptions = { 
 			zoom : 13,
@@ -85,26 +85,53 @@ function init() {
 	    	{"position": braintree,
 	    		"title": "Braintree"}
 	    ]
+	data = {}
+	position_array = []
+	title_array = []
 	for (var i = 0, length = stations.length; i < length; i++){
-		var data = stations[i]
+	position_array.push(stations[i].position);
+	title_array.push(stations[i].title);
+	
+
+	data["position"] = position_array;
+	data["title"] = title_array;
+	//customize icon
+	var icon = "train_icon.png"
+
+
 
 	//create marker
+	//for (var j = 0, length = data.length; j < length; j++){
 	var marker = new google.maps.Marker({
-		position: data.position,
+		position: data.position[i],
 		map: map,
-		title: data.title
-
+		title: data.title[i],
+		icon: icon
 	    	});
-	}
+	//console.log("testing")
 
 	marker.setMap(map);
+}
+
+for (var j = 0, length = data.length; j < length; j++){
+	//create line connecting stations
+	var trackPath = new google.maps.Polyline({
+    	path: data.position,
+    	geodesic: true,
+   		strokeColor: '#FF0000',
+    	strokeOpacity: 1.0,
+    	strokeWeight: 2
+  });
+}
+	//trackPath.setMap(map);
+
 
 	//global info window ***
 	var infowindow = new google.maps.InfoWindow();
 
 	// open info window on click
 	google.maps.event.addListener(marker, 'click', function() {
-			infowindow.setContent(marker.title);
+			infowindow.setContent(data.title);
 	       	infowindow.open(map,marker);
 	    });
 	}
