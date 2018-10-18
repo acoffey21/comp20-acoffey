@@ -36,62 +36,95 @@ function init() {
 
 	//create a list of locations
 	var stations = [ 
-			{ //only displays first station
-	        "position": southstation,
-	     	"title": "South Station"
-	        //add image
-	        //add schedule info
-	    	},
-	    	{"position": andrew,
-	    		"title": "Andrew"},
+			{"position": alewife,
+	    		"title": "Alewife"},
+	    	{"position": davis,
+	    		"title": "Davis"},
 	    	{"position": portersq,
 	    		"title": "Porter Square"},
 	    	{"position": harvardsq,
-	    	"title": "Harvard Square"},
-	    	{"position": jfkumass,
-	    		"title": "JFK/UMass"},
-	    	{"position": savinhill,
-	    		"title": "Savin Hill"},
-	    	{"position": parkst,
-	    		"title": "Park Street"},
-	    	{"position": broadway,
-	    		"title": "Broadway"},
-	    	{"position": northquincy,
-	    		"title": "North Quincy"},
-	    	{"position": shawmut,
-	    		"title": "Shawmut"},
-	    	{"position": davis,
-	    		"title": "Davis"},
-	    	{"position": alewife,
-	    		"title": "Alewife"},
+	    		"title": "Harvard Square"},
+	    	{"position": cntrlsq,
+	    		"title": "Central Square"},
 	    	{"position": kendallmit,
 	    		"title": "Kendall/MIT"},
 	    	{"position": charlesmgh,
 	    		"title": "Charles/MGH"},
+	    	{"position": parkst,
+	    		"title": "Park Street"},
 	    	{"position": downtownxing,
 	    		"title": "Downtown Crossing"},
+			{"position": southstation,
+	     		"title": "South Station"},
+	     	{"position": broadway,
+	    		"title": "Broadway"},
+	    	{"position": andrew,
+	    		"title": "Andrew"},
+	    	{"position": jfkumass,
+	    		"title": "JFK/UMass"},
+	    	{"position": northquincy,
+	    		"title": "North Quincy"},
+	    	{"position": wollaston,
+	    		"title": "Wollaston"},
 	    	{"position": quincyctr,
 	    		"title": "Quincy Center"},
 	    	{"position": quincyadams,
 	    		"title": "Quincy Adams"},
-	    	{"position": ashmont,
-	    		"title": "Ashmont"},
-	    	{"position": wollaston,
-	    		"title": "Wollaston"},
+	    	{"position": braintree,
+	    		"title": "Braintree"},
+	    	{"position": savinhill,
+	    		"title": "Savin Hill"},
 	    	{"position": fieldscnr,
 	    		"title": "Fields Corner"},
-	    	{"position": cntrlsq,
-	    		"title": "Central Square"},
+	    	{"position": shawmut,
+	    		"title": "Shawmut"},
+	    	{"position": ashmont,
+	    		"title": "Ashmont"}
+	    ]
+	/* var split1 = [
+	 		{"position": jfkumass,
+	    		"title": "JFK/UMass"},
+	    	{"position": northquincy,
+	    		"title": "North Quincy"},
+	    	{"position": wollaston,
+	    		"title": "Wollaston"},
+	    	{"position": quincyctr,
+	    		"title": "Quincy Center"},
+	    	{"position": quincyadams,
+	    		"title": "Quincy Adams"},
 	    	{"position": braintree,
 	    		"title": "Braintree"}
 	    ]
-	data = {}
-	position_array = []
-	title_array = []
+	var split2 = [
+			{"position": jfkumass,
+	    		"title": "JFK/UMass"},
+	    		{"position": savinhill,
+	    		"title": "Savin Hill"},
+	    	{"position": fieldscnr,
+	    		"title": "Fields Corner"},
+	    	{"position": shawmut,
+	    		"title": "Shawmut"},
+	    	{"position": ashmont,
+	    		"title": "Ashmont"}
+	]
+	*/
+	//initialize lists and objects
+	data = {};
+	/*split1data = {};
+	split2data = {}; */
+	position_array = [];
+	title_array = [];
+	/*split1_array =[];
+	split2_array = []; */
+
 	for (var i = 0, length = stations.length; i < length; i++){
 	position_array.push(stations[i].position);
 	title_array.push(stations[i].title);
-	
+	/*split1_array.push(split1[i].position);
+	split2_array.push(split2[i].position);
+
+	split1data["position"] = split1_array;
+	split2data["position"] = split2_array; */
 
 	data["position"] = position_array;
 	data["title"] = title_array;
@@ -108,12 +141,12 @@ function init() {
 		title: data.title[i],
 		icon: icon
 	    	});
-	//console.log("testing")
 
 	marker.setMap(map);
 }
+	console.log(data.title)
+	console.log(data.position)
 
-for (var j = 0, length = data.length; j < length; j++){
 	//create line connecting stations
 	var trackPath = new google.maps.Polyline({
     	path: data.position,
@@ -122,16 +155,21 @@ for (var j = 0, length = data.length; j < length; j++){
     	strokeOpacity: 1.0,
     	strokeWeight: 2
   });
-}
-	//trackPath.setMap(map);
-
+	/*var trackSplit1 = new google.maps.Polyline({
+    	path: split1,
+    	geodesic: true,
+   		strokeColor: '#FF0000',
+    	strokeOpacity: 1.0,
+    	strokeWeight: 2
+  }); */
+	trackPath.setMap(map);
 
 	//global info window ***
 	var infowindow = new google.maps.InfoWindow();
 
 	// open info window on click
 	google.maps.event.addListener(marker, 'click', function() {
-			infowindow.setContent(data.title);
+			infowindow.setContent(data.title); /////how to pull out correct station title???
 	       	infowindow.open(map,marker);
 	    });
-	}
+}
