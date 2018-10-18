@@ -34,6 +34,8 @@ function init() {
 	// create map
 	var map = new google.maps.Map(document.getElementById("map_outline"), theOptions);
 
+	getMyLocation(map);
+
 	//create a list of locations
 	var stations = [ 
 			{"position": alewife,
@@ -120,6 +122,7 @@ function init() {
 	for (var i = 0, length = stations.length; i < length; i++){
 	position_array.push(stations[i].position);
 	title_array.push(stations[i].title);
+
 	/*split1_array.push(split1[i].position);
 	split2_array.push(split2[i].position);
 
@@ -144,8 +147,6 @@ function init() {
 
 	marker.setMap(map);
 }
-	console.log(data.title)
-	console.log(data.position)
 
 	//create line connecting stations
 	var trackPath = new google.maps.Polyline({
@@ -172,4 +173,46 @@ function init() {
 			infowindow.setContent(data.title); /////how to pull out correct station title???
 	       	infowindow.open(map,marker);
 	    });
+}
+
+////////////////
+
+
+function getMyLocation(map) {
+	var myLat = 0;
+	var myLng = 0;
+	
+	var me = new google.maps.LatLng(myLat, myLng);
+	if (navigator.geolocation) { // the navigator.geolocation object is supported on your browser
+		navigator.geolocation.getCurrentPosition(function(position) {
+			myLat = position.coords.latitude;
+			myLng = position.coords.longitude;
+			renderMap(myLat, myLng, map);
+				});
+			}
+			else {
+				alert("Geolocation is not supported by your web browser :(");
+				}		
+}
+
+function renderMap(myLat, myLng, map) {
+
+	me = new google.maps.LatLng(myLat, myLng);
+	console.log(me)
+	// Update map and go there...
+	map.panTo(me);
+				
+	// Create a marker
+	me_marker = new google.maps.Marker({
+		position: me,
+		title: "I'm Here!"
+		});
+	me_marker.setMap(map);
+					
+	var me_infowindow = new google.maps.InfoWindow();
+	// Open info window on click of marker
+	google.maps.event.addListener(me_marker, 'click', function() {
+		me_infowindow.setContent(me_marker.title);
+		me_infowindow.open(map, me_marker);
+		});
 }
