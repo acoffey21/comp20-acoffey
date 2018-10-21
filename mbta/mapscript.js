@@ -193,18 +193,36 @@ function init() {
 			var latLngA = me_marker.position;
 			var distance = [];
 
-			console.log(data.position)
-
 			for (var k = 0, length = 22; k < length; k++){
 				distance.push(google.maps.geometry.spherical.computeDistanceBetween(latLngA, data.position[k]))
 			}
-			console.log(distance);
+
+			var shortest = distance[0];
+			var track = 0;
+			for (var j = 0, length = distance.length; j < length; j++) {
+				if (distance[j] < shortest){
+					shortest = distance[j];
+					track++;
+				}
+			}
+
+			var shortestArray = [me, data.position[track]];
+
+			var shortestPath = new google.maps.Polyline({
+		    	path: shortestArray,
+		    	geodesic: true,
+		   		strokeColor: '#6495ED',
+		    	strokeOpacity: 1.0,
+		    	strokeWeight: 2
+		  	});
+	
+			shortestPath.setMap(map); 
 		});
 			
 	}
 	else {
 		alert("Geolocation is not supported by your web browser :(");
-	}		
+	}
 //////////////////////////////////////////////////
 
 
