@@ -34,7 +34,8 @@ function init() {
 	// create map
 	var map = new google.maps.Map(document.getElementById("map_outline"), theOptions);
 
-	getMyLocation(map);
+	//getMyLocation(map);
+
 
 	//create a list of locations
 	var stations = [ 
@@ -112,42 +113,31 @@ function init() {
 	*/
 	//initialize lists and objects
 	data = {};
-	/*split1data = {};
-	split2data = {}; */
 	position_array = [];
 	title_array = [];
-	/*split1_array =[];
-	split2_array = []; */
 
 	for (var i = 0, length = stations.length; i < length; i++){
-	position_array.push(stations[i].position);
-	title_array.push(stations[i].title);
+		position_array.push(stations[i].position);
+		title_array.push(stations[i].title);
 
-	/*split1_array.push(split1[i].position);
-	split2_array.push(split2[i].position);
+		data["position"] = position_array;
+		data["title"] = title_array;
 
-	split1data["position"] = split1_array;
-	split2data["position"] = split2_array; */
+		//customize icon
+		var icon = "train_icon.png"
 
-	data["position"] = position_array;
-	data["title"] = title_array;
-	//customize icon
-	var icon = "train_icon.png"
+		//create marker
+		var marker = new google.maps.Marker({
+			position: data.position[i],
+			map: map,
+			title: data.title[i],
+			icon: icon
+		    	});
 
+		marker.setMap(map);
+	}
 
-
-	//create marker
-	//for (var j = 0, length = data.length; j < length; j++){
-	var marker = new google.maps.Marker({
-		position: data.position[i],
-		map: map,
-		title: data.title[i],
-		icon: icon
-	    	});
-
-	marker.setMap(map);
-}
-
+//////////////////////////////////////////////////
 	//create line connecting stations
 	var trackPath = new google.maps.Polyline({
     	path: data.position,
@@ -155,14 +145,8 @@ function init() {
    		strokeColor: '#FF0000',
     	strokeOpacity: 1.0,
     	strokeWeight: 2
-  });
-	/*var trackSplit1 = new google.maps.Polyline({
-    	path: split1,
-    	geodesic: true,
-   		strokeColor: '#FF0000',
-    	strokeOpacity: 1.0,
-    	strokeWeight: 2
-  }); */
+  	});
+
 	trackPath.setMap(map);
 
 	//global info window ***
@@ -173,46 +157,55 @@ function init() {
 			infowindow.setContent(data.title); /////how to pull out correct station title???
 	       	infowindow.open(map,marker);
 	    });
-}
-
-////////////////
 
 
-function getMyLocation(map) {
+////////////////////////////////////////////////
+
 	var myLat = 0;
 	var myLng = 0;
 	
-	var me = new google.maps.LatLng(myLat, myLng);
+
 	if (navigator.geolocation) { // the navigator.geolocation object is supported on your browser
 		navigator.geolocation.getCurrentPosition(function(position) {
+
 			myLat = position.coords.latitude;
 			myLng = position.coords.longitude;
-			renderMap(myLat, myLng, map);
-				});
-			}
-			else {
-				alert("Geolocation is not supported by your web browser :(");
-				}		
-}
+			var me = new google.maps.LatLng(myLat, myLng);
 
-function renderMap(myLat, myLng, map) {
-
-	me = new google.maps.LatLng(myLat, myLng);
-	console.log(me)
-	// Update map and go there...
-	map.panTo(me);
+			// Update map and go there...
+			map.panTo(me);
 				
-	// Create a marker
-	me_marker = new google.maps.Marker({
-		position: me,
-		title: "I'm Here!"
+			// Create a marker
+			var me_marker = new google.maps.Marker({
+				position: me,
+				title: "I'm Here!"
+				});
+			me_marker.setMap(map);
+							
+			var me_infowindow = new google.maps.InfoWindow();
+
+			// Open info window on click of marker
+			google.maps.event.addListener(me_marker, 'click', function() {
+				me_infowindow.setContent(me_marker.title);
+				me_infowindow.open(map, me_marker);
+				});
+
+			var latLngA = me_marker.position;
+			var distance = [];
+
+			console.log(data.position)
+
+			for (var k = 0, length = 22; k < length; k++){
+				distance.push(google.maps.geometry.spherical.computeDistanceBetween(latLngA, data.position[k]))
+			}
+			console.log(distance);
 		});
-	me_marker.setMap(map);
-					
-	var me_infowindow = new google.maps.InfoWindow();
-	// Open info window on click of marker
-	google.maps.event.addListener(me_marker, 'click', function() {
-		me_infowindow.setContent(me_marker.title);
-		me_infowindow.open(map, me_marker);
-		});
+			
+	}
+	else {
+		alert("Geolocation is not supported by your web browser :(");
+	}		
+//////////////////////////////////////////////////
+
+
 }
