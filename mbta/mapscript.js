@@ -149,6 +149,32 @@ function init() {
 
 	trackPath.setMap(map);
 
+
+////////////////////////////////////////////////////
+//get json data and parse and then add after event click
+	request = new XMLHttpRequest();
+	console.log("check1");
+	request.open("GET", "https://chicken-of-the-sea.herokuapp.com/redline/schedule.json?stop_id=place-davis", true);
+	console.log("check2")
+	request.onreadystatechange = function(){
+		console.log("check3")
+		if (request.readyState == 4 && request.status == 200){
+			console.log("Got the data back!");
+			var arrivalData = request.responseText;
+			var arrivalTimes = JSON.parse(arrivalData);
+			console.log(arrivalTimes.data);
+			var returnHTML = "<ul>"
+			for (m = 0, length = arrivalTimes.data.length; m < length; m++){
+				returnHTML += "<li>" + arrivalTimes.data[m] + "<li>"
+			}
+			returnHTML += "</ul>"
+		}
+
+	}
+	request.send();
+
+///////////////////////////////////////////////////
+
 	//global info window ***
 	var infowindow = new google.maps.InfoWindow();
 
@@ -174,23 +200,8 @@ function init() {
 
 			// Update map and go there...
 			map.panTo(me);
-				
-			// Create a marker
-			var me_marker = new google.maps.Marker({
-				position: me,
-				title: "I'm Here!"
-				});
-			me_marker.setMap(map);
-							
-			var me_infowindow = new google.maps.InfoWindow();
 
-			// Open info window on click of marker
-			google.maps.event.addListener(me_marker, 'click', function() {
-				me_infowindow.setContent(me_marker.title);
-				me_infowindow.open(map, me_marker);
-				});
-
-			var latLngA = me_marker.position;
+			var latLngA = me;
 			var distance = [];
 
 			for (var k = 0, length = 22; k < length; k++){
@@ -206,6 +217,9 @@ function init() {
 				}
 			}
 
+			var distance_miles = shortest*0.000621371192;
+			console.log(distance_miles);
+
 			var shortestArray = [me, data.position[track]];
 
 			var shortestPath = new google.maps.Polyline({
@@ -217,6 +231,21 @@ function init() {
 		  	});
 	
 			shortestPath.setMap(map); 
+
+			// Create a marker
+			var me_marker = new google.maps.Marker({
+				position: me,
+				title: "Your closest stop is "+ data.title[track] + " which is " + distance_miles + " miles away!"
+				});
+			me_marker.setMap(map);
+							
+			var me_infowindow = new google.maps.InfoWindow();
+
+			// Open info window on click of marker
+			google.maps.event.addListener(me_marker, 'click', function() {
+				me_infowindow.setContent(me_marker.title);
+				me_infowindow.open(map, me_marker);
+				});
 		});
 			
 	}
