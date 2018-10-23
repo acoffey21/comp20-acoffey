@@ -34,62 +34,85 @@ function init() {
 	// create map
 	var map = new google.maps.Map(document.getElementById("map_outline"), theOptions);
 
-	//getMyLocation(map);
-
 
 	//create a list of locations
 	var stations = [ 
 			{"position": alewife,
-	    		"title": "Alewife"},
+	    		"title": "Alewife",
+	    		"url": "place-alfcl"},
 	    	{"position": davis,
-	    		"title": "Davis"},
+	    		"title": "Davis",
+	    		"url": "place-davis"},
 	    	{"position": portersq,
-	    		"title": "Porter Square"},
+	    		"title": "Porter Square",
+	    		"url": "place-portr"},
 	    	{"position": harvardsq,
-	    		"title": "Harvard Square"},
+	    		"title": "Harvard Square",
+	    		"url": "place-harsq"},
 	    	{"position": cntrlsq,
-	    		"title": "Central Square"},
+	    		"title": "Central Square",
+	    		"url": "place-cntsq"},
 	    	{"position": kendallmit,
-	    		"title": "Kendall/MIT"},
+	    		"title": "Kendall/MIT",
+	    		"url": "place-knncl"},
 	    	{"position": charlesmgh,
-	    		"title": "Charles/MGH"},
+	    		"title": "Charles/MGH",
+	    		"url": "place-chmnl"},
 	    	{"position": parkst,
-	    		"title": "Park Street"},
+	    		"title": "Park Street",
+	    		"url": "place-pktrm"},
 	    	{"position": downtownxing,
-	    		"title": "Downtown Crossing"},
+	    		"title": "Downtown Crossing",
+	    		"url": "place-dwnxg"},
 			{"position": southstation,
-	     		"title": "South Station"},
+	     		"title": "South Station",
+	     		"url": "place-sstat"},
 	     	{"position": broadway,
-	    		"title": "Broadway"},
+	    		"title": "Broadway",
+	    		"url": "place-brdwy"},
 	    	{"position": andrew,
-	    		"title": "Andrew"},
+	    		"title": "Andrew",
+	    		"url": "place-andrw"},
 	    	{"position": jfkumass,
-	    		"title": "JFK/UMass"},
+	    		"title": "JFK/UMass",
+	    		"url": "place-jfk"},
 	    	{"position": northquincy,
-	    		"title": "North Quincy"},
+	    		"title": "North Quincy",
+	    		"url": "place-nqncy"},
 	    	{"position": wollaston,
-	    		"title": "Wollaston"},
+	    		"title": "Wollaston",
+	    		"url": "place-wlsta"},
 	    	{"position": quincyctr,
-	    		"title": "Quincy Center"},
+	    		"title": "Quincy Center",
+	    		"url": "place-qnctr"},
 	    	{"position": quincyadams,
-	    		"title": "Quincy Adams"},
+	    		"title": "Quincy Adams",
+	    		"url": "place-qamnl"},
 	    	{"position": braintree,
-	    		"title": "Braintree"},
+	    		"title": "Braintree",
+	    		"url": "place-brntn"},
 	    	{"position": savinhill,
-	    		"title": "Savin Hill"},
+	    		"title": "Savin Hill",
+	    		"url": "place-shmnl"},
 	    	{"position": fieldscnr,
-	    		"title": "Fields Corner"},
+	    		"title": "Fields Corner",
+	    		"url": "place-fldcr"},
 	    	{"position": shawmut,
-	    		"title": "Shawmut"},
+	    		"title": "Shawmut",
+	    		"url": "place-smmnl"},
 	    	{"position": ashmont,
-	    		"title": "Ashmont"}
+	    		"title": "Ashmont",
+	    		"url": "place-asmnl"}
 	    ]
 
-	//initialize lists and objects
+	//initialize lists and objects and info window
 	data = {};
 	position_array = [];
 	title_array = [];
+	returnArray = [];
+	var infowindow = new google.maps.InfoWindow();
 
+	//create markers for each stop
 	for (var i = 0, length = stations.length; i < length; i++){
 		position_array.push(stations[i].position);
 		title_array.push(stations[i].title);
@@ -107,10 +130,36 @@ function init() {
 			title: data.title[i],
 			icon: icon
 		    	});
+		//marker.setMap(map);
+	//}
+	console.log(marker)
+//get json data and parse and then add after event click
 
-		marker.setMap(map);
-	}
 
+	request = new XMLHttpRequest();
+	request.open("GET", "https://chicken-of-the-sea.herokuapp.com/redline/schedule.json?stop_id="+stations[i].url, true);
+	request.onreadystatechange = function(){
+		if (request.readyState == 4 && request.status == 200){
+			//console.log("Got the data back!");
+			var arrivalData = request.responseText;
+			var arrival = JSON.parse(arrivalData);
+			var stopTimes = arrival["data"];
+
+			marker.content = "This is " + marker.title + "! \n The arrival schedule is : " + stopTimes
+
+			// open info window on click
+			google.maps.event.addListener(marker, 'click', function() {
+				infowindow.setContent(marker.content); 
+	       		infowindow.open(this.getMap(), this); 
+	    		});
+			}
+			console.log(marker.content)
+		}
+		request.send();
+}
+
+///////////////////////////////////////////////////////////////////////
+//initialize branches of the line to be displayed
 	
 	trunkarray = []
 	for (var l = 0, length = 13; l < length; l++){
@@ -122,15 +171,13 @@ function init() {
 		branch1.push(position_array[w])
 	}
 
-	console.log(position_array.length)
 
 	branch2 = [position_array[12]]
-	for (var x = 18, length = 22; x < length; x++){
+		for (var x = 18, length = 22; x < length; x++){
 		branch2.push(position_array[x])
 	}
-	console.log(branch2)
 
-
+//draw lines between stops and branches
 var trackPath = new google.maps.Polyline({
     	path: trunkarray,
     	geodesic: true,
@@ -141,7 +188,7 @@ var trackPath = new google.maps.Polyline({
 
 	trackPath.setMap(map);
 
-	var branch1Path = new google.maps.Polyline({
+var branch1Path = new google.maps.Polyline({
     	path: branch1,
     	geodesic: true,
    		strokeColor: '#FF0000',
@@ -151,7 +198,7 @@ var trackPath = new google.maps.Polyline({
 
 	branch1Path.setMap(map);
 
-	var branch2Path = new google.maps.Polyline({
+var branch2Path = new google.maps.Polyline({
     	path: branch2,
     	geodesic: true,
    		strokeColor: '#FF0000',
@@ -162,39 +209,11 @@ var trackPath = new google.maps.Polyline({
 	branch2Path.setMap(map);
 
 ////////////////////////////////////////////////////
-//get json data and parse and then add after event click
-	returnArray = [];
-	request = new XMLHttpRequest();
-	console.log("check1");
-	request.open("GET", "https://chicken-of-the-sea.herokuapp.com/redline/schedule.json?stop_id=place-davis", true);
-	console.log("check2")
-	request.onreadystatechange = function(){
-		console.log("check3")
-		if (request.readyState == 4 && request.status == 200){
-			console.log("Got the data back!");
-			var arrivalData = request.responseText;
-			var arrival = JSON.parse(arrivalData);
-			var stopTimes = arrival["data"];
-			console.log(stopTimes)
 
-			var infowindow = new google.maps.InfoWindow();
 
-			// open info window on click
-			google.maps.event.addListener(marker, 'click', function() {
-				infowindow.setContent("This is " + marker.title + "! \n The upcoming schedule is : " + stopTimes); /////how to pull out correct station title???
-	       		infowindow.open(map,marker);
-	    		});
-			}
-		}
-
-	request.send();
 ///////////////////////////////////////////////////
 
-	//global info window ***
-
-
-
-////////////////////////////////////////////////
+///////////////////////////////////////////////////
 
 	var myLat = 0;
 	var myLng = 0;
@@ -219,6 +238,7 @@ var trackPath = new google.maps.Polyline({
 
 			var shortest = distance[0];
 			var track = 0;
+
 			for (var j = 0, length = distance.length; j < length; j++) {
 				if (distance[j] < shortest){
 					shortest = distance[j];
@@ -227,7 +247,6 @@ var trackPath = new google.maps.Polyline({
 			}
 
 			var distance_miles = shortest*0.000621371192;
-			console.log(distance_miles);
 
 			var shortestArray = [me, position_array[track]];
 
