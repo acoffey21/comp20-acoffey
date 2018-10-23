@@ -84,33 +84,7 @@ function init() {
 	    	{"position": ashmont,
 	    		"title": "Ashmont"}
 	    ]
-	/* var split1 = [
-	 		{"position": jfkumass,
-	    		"title": "JFK/UMass"},
-	    	{"position": northquincy,
-	    		"title": "North Quincy"},
-	    	{"position": wollaston,
-	    		"title": "Wollaston"},
-	    	{"position": quincyctr,
-	    		"title": "Quincy Center"},
-	    	{"position": quincyadams,
-	    		"title": "Quincy Adams"},
-	    	{"position": braintree,
-	    		"title": "Braintree"}
-	    ]
-	var split2 = [
-			{"position": jfkumass,
-	    		"title": "JFK/UMass"},
-	    		{"position": savinhill,
-	    		"title": "Savin Hill"},
-	    	{"position": fieldscnr,
-	    		"title": "Fields Corner"},
-	    	{"position": shawmut,
-	    		"title": "Shawmut"},
-	    	{"position": ashmont,
-	    		"title": "Ashmont"}
-	]
-	*/
+
 	//initialize lists and objects
 	data = {};
 	position_array = [];
@@ -137,10 +111,28 @@ function init() {
 		marker.setMap(map);
 	}
 
-//////////////////////////////////////////////////
-	//create line connecting stations
-	var trackPath = new google.maps.Polyline({
-    	path: data.position,
+	
+	trunkarray = []
+	for (var l = 0, length = 13; l < length; l++){
+		trunkarray.push(position_array[l])
+	}
+
+	branch1 = []
+	for (var w = 12, length = 18; w < length; w++){
+		branch1.push(position_array[w])
+	}
+
+	console.log(position_array.length)
+
+	branch2 = [position_array[12]]
+	for (var x = 18, length = 22; x < length; x++){
+		branch2.push(position_array[x])
+	}
+	console.log(branch2)
+
+
+var trackPath = new google.maps.Polyline({
+    	path: trunkarray,
     	geodesic: true,
    		strokeColor: '#FF0000',
     	strokeOpacity: 1.0,
@@ -149,9 +141,29 @@ function init() {
 
 	trackPath.setMap(map);
 
+	var branch1Path = new google.maps.Polyline({
+    	path: branch1,
+    	geodesic: true,
+   		strokeColor: '#FF0000',
+    	strokeOpacity: 1.0,
+    	strokeWeight: 2
+  	});
+
+	branch1Path.setMap(map);
+
+	var branch2Path = new google.maps.Polyline({
+    	path: branch2,
+    	geodesic: true,
+   		strokeColor: '#FF0000',
+    	strokeOpacity: 1.0,
+    	strokeWeight: 2
+  	});
+
+	branch2Path.setMap(map);
 
 ////////////////////////////////////////////////////
 //get json data and parse and then add after event click
+	returnArray = [];
 	request = new XMLHttpRequest();
 	console.log("check1");
 	request.open("GET", "https://chicken-of-the-sea.herokuapp.com/redline/schedule.json?stop_id=place-davis", true);
@@ -161,28 +173,25 @@ function init() {
 		if (request.readyState == 4 && request.status == 200){
 			console.log("Got the data back!");
 			var arrivalData = request.responseText;
-			var arrivalTimes = JSON.parse(arrivalData);
-			console.log(arrivalTimes.data);
-			var returnHTML = "<ul>"
-			for (m = 0, length = arrivalTimes.data.length; m < length; m++){
-				returnHTML += "<li>" + arrivalTimes.data[m] + "<li>"
+			var arrival = JSON.parse(arrivalData);
+			var stopTimes = arrival["data"];
+			console.log(stopTimes)
+
+			var infowindow = new google.maps.InfoWindow();
+
+			// open info window on click
+			google.maps.event.addListener(marker, 'click', function() {
+				infowindow.setContent("This is " + marker.title + "! \n The upcoming schedule is : " + stopTimes); /////how to pull out correct station title???
+	       		infowindow.open(map,marker);
+	    		});
 			}
-			returnHTML += "</ul>"
 		}
 
-	}
 	request.send();
-
 ///////////////////////////////////////////////////
 
 	//global info window ***
-	var infowindow = new google.maps.InfoWindow();
 
-	// open info window on click
-	google.maps.event.addListener(marker, 'click', function() {
-			infowindow.setContent(data.title); /////how to pull out correct station title???
-	       	infowindow.open(map,marker);
-	    });
 
 
 ////////////////////////////////////////////////
@@ -205,7 +214,7 @@ function init() {
 			var distance = [];
 
 			for (var k = 0, length = 22; k < length; k++){
-				distance.push(google.maps.geometry.spherical.computeDistanceBetween(latLngA, data.position[k]))
+				distance.push(google.maps.geometry.spherical.computeDistanceBetween(latLngA, position_array[k]))
 			}
 
 			var shortest = distance[0];
@@ -220,7 +229,7 @@ function init() {
 			var distance_miles = shortest*0.000621371192;
 			console.log(distance_miles);
 
-			var shortestArray = [me, data.position[track]];
+			var shortestArray = [me, position_array[track]];
 
 			var shortestPath = new google.maps.Polyline({
 		    	path: shortestArray,
@@ -235,7 +244,7 @@ function init() {
 			// Create a marker
 			var me_marker = new google.maps.Marker({
 				position: me,
-				title: "Your closest stop is "+ data.title[track] + " which is " + distance_miles + " miles away!"
+				title: "Your closest stop is "+ title_array[track] + " which is " + distance_miles + " miles away!"
 				});
 			me_marker.setMap(map);
 							
