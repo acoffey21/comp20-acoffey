@@ -110,52 +110,72 @@ function init() {
 	position_array = [];
 	title_array = [];
 	returnArray = [];
+
 	var infowindow = new google.maps.InfoWindow();
 
 	//create markers for each stop
 	for (var i = 0, length = stations.length; i < length; i++){
-		position_array.push(stations[i].position);
+		/*position_array.push(stations[i].position);
 		title_array.push(stations[i].title);
 
 		data["position"] = position_array;
-		data["title"] = title_array;
+		data["title"] = title_array; */
 
 		//customize icon
 		var icon = "train_icon.png"
 
 		//create marker
-		var marker = new google.maps.Marker({
-			position: data.position[i],
+		var marker = new google.maps.Marker({ ///// marker is overwritting itself, so only thinks its ashmont
+			position: stations[i].position,
 			map: map,
-			title: data.title[i],
+			title: stations[i].title,
+			id: stations[i].url,
 			icon: icon
-		    	});
-		//marker.setMap(map);
+		    	})
+		marker.setMap(map);
 	//}
-	console.log(marker)
 //get json data and parse and then add after event click
+	google.maps.event.addListener(marker, 'click', function() { /////////////
+		request = new XMLHttpRequest();
+		request.open("GET", "https://chicken-of-the-sea.herokuapp.com/redline/schedule.json?stop_id="+ marker.id , true); //
+			console.log("marker id:" + marker.id);
+
+		request.onreadystatechange = function(){
+				//console.log("on ready state function working");
+			if (request.readyState == 4 && request.status == 200){
+				console.log("ready to go");
+				var arrivalData = request.responseText;
+				var arrival = JSON.parse(arrivalData); //////
+				console.log("arrival" +  arrival);
+				var stopTimes = [];
+				for( var z = 0, length = arrival.data.length; z< length; z++){
+					stopTimes.push(arrival.data[z].attributes.arrival_time);///////////
+				}
+
+				console.log("this is arrival times: " + stopTimes);
+
+				//if direction id = .... direction = .....
+					//else direction = ....
+
+				//if arrival time == null ... "sorry no trains right now"
+				//else arrivaltime = ....
 
 
-	request = new XMLHttpRequest();
-	request.open("GET", "https://chicken-of-the-sea.herokuapp.com/redline/schedule.json?stop_id="+stations[i].url, true);
-	request.onreadystatechange = function(){
-		if (request.readyState == 4 && request.status == 200){
-			//console.log("Got the data back!");
-			var arrivalData = request.responseText;
-			var arrival = JSON.parse(arrivalData);
-			var stopTimes = arrival["data"];
+				//var content = "this is the content";//"This is " + marker.title + "! \nThe arrival schedule is : " + stopTimes ////////// arrivaltime " heading towards " + direction
 
-			marker.content = "This is " + marker.title + "! \n The arrival schedule is : " + stopTimes
-
-			// open info window on click
-			google.maps.event.addListener(marker, 'click', function() {
-				infowindow.setContent(marker.content); 
-	       		infowindow.open(this.getMap(), this); 
-	    		});
+				//console.log("Here is the content: " + content)
 			}
-			console.log(marker.content)
+			else{console.log("XML not working");}
+
 		}
 		request.send();
+
+		//console.log("marker title: " + marker.title);
+		//console.log("this title: " + this.title);
+		infowindow.setContent(this.title); 
+		infowindow.open(map, this); 
+	});
+			//}
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -163,18 +183,18 @@ function init() {
 	
 	trunkarray = []
 	for (var l = 0, length = 13; l < length; l++){
-		trunkarray.push(position_array[l])
+		trunkarray.push(stations[l].position)
 	}
 
 	branch1 = []
 	for (var w = 12, length = 18; w < length; w++){
-		branch1.push(position_array[w])
+		branch1.push(stations[w].position)
 	}
 
 
-	branch2 = [position_array[12]]
+	branch2 = [stations[12].position]
 		for (var x = 18, length = 22; x < length; x++){
-		branch2.push(position_array[x])
+		branch2.push(stations[x].position)
 	}
 
 //draw lines between stops and branches
@@ -233,7 +253,7 @@ var branch2Path = new google.maps.Polyline({
 			var distance = [];
 
 			for (var k = 0, length = 22; k < length; k++){
-				distance.push(google.maps.geometry.spherical.computeDistanceBetween(latLngA, position_array[k]))
+				distance.push(google.maps.geometry.spherical.computeDistanceBetween(latLngA, stations[k].position))
 			}
 
 			var shortest = distance[0];
@@ -248,7 +268,7 @@ var branch2Path = new google.maps.Polyline({
 
 			var distance_miles = shortest*0.000621371192;
 
-			var shortestArray = [me, position_array[track]];
+			var shortestArray = [me, stations[track].position];
 
 			var shortestPath = new google.maps.Polyline({
 		    	path: shortestArray,
@@ -263,7 +283,7 @@ var branch2Path = new google.maps.Polyline({
 			// Create a marker
 			var me_marker = new google.maps.Marker({
 				position: me,
-				title: "Your closest stop is "+ title_array[track] + " which is " + distance_miles + " miles away!"
+				title: "Your closest stop is "+ stations[track].title + " which is " + distance_miles + " miles away!"
 				});
 			me_marker.setMap(map);
 							
