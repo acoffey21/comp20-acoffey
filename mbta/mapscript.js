@@ -137,45 +137,53 @@ function init() {
 //get json data and parse and then add after event click
 	google.maps.event.addListener(marker, 'click', function() { /////////////
 		request = new XMLHttpRequest();
-		request.open("GET", "https://chicken-of-the-sea.herokuapp.com/redline/schedule.json?stop_id="+ marker.id , true); //
-			console.log("marker id:" + marker.id);
-
+		request.open("GET", "https://chicken-of-the-sea.herokuapp.com/redline/schedule.json?stop_id="+ this.id , true); //
+			console.log("marker id:" + this.id);
+		var copyOfMarker = this;
 		request.onreadystatechange = function(){
 				//console.log("on ready state function working");
 			if (request.readyState == 4 && request.status == 200){
 				console.log("ready to go");
 				var arrivalData = request.responseText;
 				var arrival = JSON.parse(arrivalData); //////
-				console.log("arrival" +  arrival);
-				var stopTimes = [];
-				for( var z = 0, length = arrival.data.length; z< length; z++){
-					stopTimes.push(arrival.data[z].attributes.arrival_time);///////////
+				console.log(arrival);
+				stopTimes = [];
+				stopDir = [];
+				for( var z = 0, length = arrival.data.length; z < length; z++){
+					if (arrival.data[z].attributes.arrival_time == null) {
+						stopTimes.push("error getting times")
+					}
+					else {
+						string = arrival.data[z].attributes.arrival_time
+						pulledTime = string.slice(11,18)
+						stopTimes.push(pulledTime);///////////
+					}
+
+					if (arrival.data[z].attributes.direction_id == 1){
+						stopDir.push("Northbound to Alewife");
+					}
+					else if (arrival.data[z].attributes.direction_id == 0){
+						stopDir.push("Southbound to Ashmont/Braintree");
+					}
+					else {
+						stopDir.push("error getting direction");
+					}
+
 				}
 
+				console.log("These are the directions " + stopDir);
 				console.log("this is arrival times: " + stopTimes);
 
-				//if direction id = .... direction = .....
-					//else direction = ....
+				var window_content = "<h3> Arrival Schedule: </h3>"  + stopTimes + "\n" + stopDir;////////// arrivaltime " heading towards " + direction
+				infowindow.setContent("<h2>" + copyOfMarker.title + "</h2>" + window_content); 
+				infowindow.open(map, copyOfMarker); 
 
-				//if arrival time == null ... "sorry no trains right now"
-				//else arrivaltime = ....
-
-
-				//var content = "this is the content";//"This is " + marker.title + "! \nThe arrival schedule is : " + stopTimes ////////// arrivaltime " heading towards " + direction
-
-				//console.log("Here is the content: " + content)
 			}
-			else{console.log("XML not working");}
-
 		}
 		request.send();
 
-		//console.log("marker title: " + marker.title);
-		//console.log("this title: " + this.title);
-		infowindow.setContent(this.title); 
-		infowindow.open(map, this); 
+		
 	});
-			//}
 }
 
 ///////////////////////////////////////////////////////////////////////
