@@ -166,7 +166,7 @@ function init() {
 					}
 				}
 
-				var window_content = "<h3> Arrival Schedule: </h3>"  + stopTimes + " \n " + stopDir;
+				var window_content = "<h3> Arrival Schedule: </h3>"  + stopTimes + " <br> " + stopDir;
 				infowindow.setContent("<h2>" + copyOfMarker.title + "</h2>" + window_content); 
 				infowindow.open(map, copyOfMarker); 
 
