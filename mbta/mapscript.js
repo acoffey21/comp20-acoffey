@@ -135,18 +135,14 @@ function init() {
 		marker.setMap(map);
 	//}
 //get json data and parse and then add after event click
-	google.maps.event.addListener(marker, 'click', function() { /////////////
+	google.maps.event.addListener(marker, 'click', function() {
 		request = new XMLHttpRequest();
-		request.open("GET", "https://chicken-of-the-sea.herokuapp.com/redline/schedule.json?stop_id="+ this.id , true); //
-			console.log("marker id:" + this.id);
+		request.open("GET", "https://chicken-of-the-sea.herokuapp.com/redline/schedule.json?stop_id="+ this.id , true); 
 		var copyOfMarker = this;
 		request.onreadystatechange = function(){
-				//console.log("on ready state function working");
 			if (request.readyState == 4 && request.status == 200){
-				console.log("ready to go");
 				var arrivalData = request.responseText;
-				var arrival = JSON.parse(arrivalData); //////
-				console.log(arrival);
+				var arrival = JSON.parse(arrivalData);
 				stopTimes = [];
 				stopDir = [];
 				for( var z = 0, length = arrival.data.length; z < length; z++){
@@ -156,7 +152,7 @@ function init() {
 					else {
 						string = arrival.data[z].attributes.arrival_time
 						pulledTime = string.slice(11,18)
-						stopTimes.push(pulledTime);///////////
+						stopTimes.push(pulledTime);
 					}
 
 					if (arrival.data[z].attributes.direction_id == 1){
@@ -168,13 +164,9 @@ function init() {
 					else {
 						stopDir.push("error getting direction");
 					}
-
 				}
 
-				console.log("These are the directions " + stopDir);
-				console.log("this is arrival times: " + stopTimes);
-
-				var window_content = "<h3> Arrival Schedule: </h3>"  + stopTimes + "\n" + stopDir;////////// arrivaltime " heading towards " + direction
+				var window_content = "<h3> Arrival Schedule: </h3>"  + stopTimes + " \n " + stopDir;
 				infowindow.setContent("<h2>" + copyOfMarker.title + "</h2>" + window_content); 
 				infowindow.open(map, copyOfMarker); 
 
@@ -235,11 +227,6 @@ var branch2Path = new google.maps.Polyline({
   	});
 
 	branch2Path.setMap(map);
-
-////////////////////////////////////////////////////
-
-
-///////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////
 
@@ -308,7 +295,5 @@ var branch2Path = new google.maps.Polyline({
 	else {
 		alert("Geolocation is not supported by your web browser :(");
 	}
-//////////////////////////////////////////////////
-
 
 }
