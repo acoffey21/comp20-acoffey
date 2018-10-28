@@ -9,6 +9,23 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
         // Your work will be done here...
+        //$(document).ready(function(){
+            $( "#msg" ).change(function() {
+                entry = $("#msg").val();
+                console.log (entry)
+                localStorage[new Date().getTime()] = entry;
+                reload();
+            })
+    //})
+
+    function reload (){
+        elem = $('#log');
+        output = "";
+        for (var i = 0; i < localStorage.length; i++) {
+            output = output + "<p>" + localStorage.getItem(localStorage.key(i)) + "</p>\n";
+        }
+        elem.innerHTML = output;
+    }
     </script>
 </head>
 

@@ -1,0 +1,17 @@
+/*body {
+	background-image: url("space.jpg");
+} */
+
+h1{
+	color: black;
+}
+
+
+#msg{
+	color: white;
+	background-color: red;
+}
+
+#log{
+	color: black;
+}
