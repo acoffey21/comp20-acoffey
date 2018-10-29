@@ -12,7 +12,7 @@
         $(document).ready(function(){
             $( "#msg" ).on('change', function() {
                 entry = $("#msg").val();
-                localStorage[new Date().getTime()] = entry;
+                localStorage[new Date($.now())] = entry;
                 reload();
             })
     })
@@ -20,9 +20,9 @@
     function reload (){
         elem = $('#log');
         output = "";
-        for (var i = 0; i < localStorage.length; i++) {
-            output = output + "<p>" + localStorage.getItem(localStorage.key(i)) + "</p>\n";
-            console.log("running through storage")
+        for (var i = localStorage.length; i >= 0 ; i--) {
+            output = output + "<p>" + localStorage.key(i) + " - " + localStorage.getItem(localStorage.key(i)) + "</p>\n";
+
         }
 
         $("#log").html(output);
