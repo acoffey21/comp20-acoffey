@@ -13,7 +13,7 @@
 
 	<h1>Methodology</h1>
 		<div class="tab">
-			<p>My methodology involved whilst testing testing this application involved checking for some of the most popular vulnerabilities as listed on the OWASP Top 10 List and using Burp to scan for vulnerabilities and as proxy to alter information. /p>
+			<p>My methodology involved whilst testing testing this application involved checking for some of the most popular vulnerabilities as listed on the OWASP Top 10 list and using Burp to scan for vulnerabilities and as proxy to alter information. /p>
 		</div>
 
 	<h1>Abstract of Findings</h1>
@@ -23,13 +23,25 @@
 			<h2> Issue #1 </h2>
 	
 			<ul>
-				<li>Thing 1</li> 
-				<li> Thing 2 </li> 
+				<li> XSS </li> 
+				<li> When getting the username from the pop-up box when the 2048 game finishes </li> 
+				<li> High, no protection against malicious pop-ups or redirections </li>
+				<li> I was able to input code in the username box to have a alert box pop up as well additionally redirect the top 10 scores to a youtube video of Rick Astley</li>
+				<li> Alert Example</li>
+				<p> <img class="pic" src="XSS1code.jpg" width="250" height="250" alt="coding of making alert box"/>
+				<img class="pic" src="XSS1proof.jpg" width="350" height="250" alt="result of making alert box"/></p>
+				<li> Never Gonna Give You Up </li>
+				<p> <img class="pic" src="XSS2acode.jpg" width="250" height="250" alt="coding of youtube reroute part a"/>
+				<img class="pic" src="XSS2bcode.jpg" width="250" height="250" alt="coding of youtube reroute part b"/>
+				<img class="pic" src="XSS2proof.jpg" width="250" height="250" alt="result of youtube reroute"/></p>
+				<li>Some resolutions to this problem may be to limit the number of characters allowed in the username input to be less than two script tags or to code the removal of special characters from the input</li>
 			</ul>
 		</div>
 
 	<h1> Conclusion </h1>
 
 	<h1> References </h1>
+		<ul>
+			<li> https://www.owasp.org/index.php/Testing_for_Reflected_Cross_site_scripting_(OTG-INPVAL-001) </li>
 </body>
 </html>
