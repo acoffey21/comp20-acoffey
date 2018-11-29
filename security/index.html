@@ -13,11 +13,13 @@
 
 	<h1>Methodology</h1>
 		<div class="tab">
-			<p>My methodology involved whilst testing testing this application involved checking for some of the most popular vulnerabilities as listed on the OWASP Top 10 list and using Burp to scan for vulnerabilities and as proxy to alter information. </p>
+			<p>My methodology involved whilst testing testing this application involved checking for some of the most popular vulnerabilities as listed on the OWASP Top 10 list. </p>
 		</div>
 
 	<h1>Abstract of Findings</h1>
-
+		<div class="tab">
+			<p>With some very basic hacking methods I was able to infiltrate the code through various windows of user input. </p>
+		</div>
 	<h1>Issues Found </h1>
 		<div class="tab">
 			<h2> Issue #1 </h2>
@@ -41,20 +43,35 @@
 			<ul>
 				<li> Injection </li>
 				<li> When inputting the username to the pop-up box when the 2048 game finishes </li> 
-				<li> Low/Medium in this example a user's username (ideally a false name) and 2048 are not particularly sensitive information so an attack of this kind on this information doesn't reap too much reward. However, if dealing with more sensitive information the rating of the severity of attack would be increased greatly</li>
+				<li> Low/Medium in this example a user's username (ideally a false name) and 2048 scores are not particularly sensitive information so an attack of this kind on this information doesn't reap too much reward. However, if dealing with more sensitive information the rating of the severity of attack would be increased greatly</li>
 				<li> I was able to overload the top 10 scores page and thus produce a pop-up on the 2048 game page of all the usernames and scores. </li>
-				<li> Proof </li>
 				<p> <img class="pic" src="Overloading.jpg" width="300" height="300" alt="pop-up box containing all database usernames and scores"/></p>
 				<li>A mitigation to the severity of this problem may be to encrypt the data being stored</li>
+			</ul>
+
+			<h2> Issue #3 </h2>
+			<ul>
+				<li> Injection </li>
+				<li> When adding a username to search for within the scores.json URL</li>
+				<li> Low/Medium in this example the 2048 information is not particularly sensitive so an attack of this kind on this information doesn't reap too much reward. However, if dealing with more sensitive information the rating of the severity of attack would be increased greatly </li>
+				<li> By adding "?username[$ne]=hehehe" to the end of the URL for scores.json the page then listed all of the information being kept in the scores collection on Nick's 2048 mongodb database</li>
+				<p> <img class="pic" src="injection_code.jpg" width="500" height="100" alt="visual of code addition to URL"/>
+				<img class="pic" src="injection_proof.jpg" width="250" height="250" alt="proof of database information"/></p>
+				<li> Encryption would also be a mitigation in this case or one could add parameters that would cause any username inputs for the the search must be validated and scrubbed of any unusual attributes (ie: the $ or [] in this case)</li>
+			</ul>
 
 		</div>
 
 
 	<h1> Conclusion </h1>
+			<div class="tab">
+			<p>In conclusion the main lesson from this assignment is to "Never Trust User Input!" as if one isn't very careful one malicious or curious person make take down all their hard work. I would suggest seriously either limiting or filtering the amount of user input and how often/many ways the database is accessed. A person with even just a bit more experience than me would be able to find many more vulnerabilites and you might want to consider when in making security improvement to utlize "hacker tools" such as Burp Suite or Low Orbit Ion Cannon to test your work.</p>
+		</div>
 
 	<h1> References </h1>
 		<ul>
-			<li> https://www.owasp.org/index.php/Testing_for_Reflected_Cross_site_scripting_(OTG-INPVAL-001) </li>
+			<li> <a href="https://www.owasp.org/images/7/72/OWASP_Top_10-2017_%28en%29.pdf.pdf ">OWASP Top 10</a> </li>
+			<li> <a href="https://www.owasp.org/index.php/Testing_for_Reflected_Cross_site_scripting_(OTG-INPVAL-001)">OWASP XSS Example</a> </li>
 			<li> Lecture notes </li>
 </body>
 </html>
