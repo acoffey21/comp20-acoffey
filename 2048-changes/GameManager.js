@@ -213,7 +213,7 @@ GameManager.prototype.move = function (direction) {
     if (!this.movesAvailable()) {
       this.over = true; // Game over!
 
-      //ADDED SOMETHING HERE
+      //ADDED SOMETHING HERE !!!!!!!!!!!!!
       username = prompt("Enter your name");
       request = new XMLHttpRequest();
       request.open("POST", "https://gameserver2048.herokuapp.com/submit", true);
