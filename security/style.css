@@ -1,2 +1,15 @@
 .tab { margin-left: 40px; }
 .pic { margin-left: 40px; }
+
+body {
+	background-color: black;
+	color: white;
+}
+
+h1 {
+	color: #49E20E;
+}
+
+h2 {
+	color: red;
+}
