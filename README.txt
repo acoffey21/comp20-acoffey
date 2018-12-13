@@ -7,7 +7,7 @@ Lab: Finalizing Your Learning Portfolio
 	-This github repository is so I have a private (no cheating) way to upload assignments that can be accessed remotely for grading or to be worked on a computer that isn't necessarily my laptop. This repository also acts as a back up in case something goes horribly wrong on my local computer, I would have a fairly recent and well noted version that I could pull and use.
 
 2) What was your favorite lab or assignment and why?
-	-I think that my favorite assignment was the mbta assignment. It gave me it fair share of grief but it's a project I would like to go back to and work on and refine more and I think that's why it's my favorite assignment. 
+	-I think that my favorite assignment was the mbta assignment. It gave me its fair share of grief but it's a project I would like to go back to and work on and refine more and I think that's why it's my favorite assignment. 
 
 3) How much do you think you have grown from day 1 of this course to now?
 	-Coming into class Day 1 with only Comp11 under my belt was a bit of a culture shock. I barely understood one programming language and did not expect to be able to pick up so many different languages and pieces of the web programming puzzle as we did in this course. 
